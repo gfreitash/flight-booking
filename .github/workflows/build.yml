@@ -17,7 +17,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_JAVA }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_TYPESCRIPT }}
         with:
           projectBaseDir: client/
           
@@ -53,5 +53,5 @@ jobs:
       - name: Build and analyze java project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_TYPESCRIPT }}
-        run: mvn -f ./api -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=gfreitash_flight-booking
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_JAVA }}
+        run: mvn -f ./api -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=gfreitash_flight-booking-java
