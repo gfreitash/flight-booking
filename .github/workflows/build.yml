@@ -10,6 +10,12 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mysql database: 'db_name' # Optional, default value is "test". The specified database which will be create
+          mysql root password: '' # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: 'your_username' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: 'your_password' # Required if "mysql user" exists. The password for the "mysql user"
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
