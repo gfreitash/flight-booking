@@ -4,11 +4,8 @@ import com.gfreitash.flight_booking.controllers.assemblers.EntityModelAssembler;
 import com.gfreitash.flight_booking.dto.AirportResource;
 import com.gfreitash.flight_booking.services.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,24 +31,20 @@ public class AirportController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<AirportResource>> getOneAirport(@PathVariable String id) {
-        Link selfLink = linkTo(methodOn(AirportController.class).getOneAirport(id)).withSelfRel();
+        var selfLink = linkTo(methodOn(AirportController.class).getOneAirport(id)).withSelfRel();
+        var collectionLink = linkTo(methodOn(AirportController.class).getAllAirports(null)).withRel("collection");
+
         return airportService.getAirportById(id)
-                .map(airport -> airportAssembler.toModel(airport, selfLink))
+                .map(airport -> airportAssembler.toModel(airport, selfLink, collectionLink))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<PagedModel<EntityModel<AirportResource>>> getAllAirports(Pageable pagination) {
-        Page<AirportResource> airports = airportService.getAllAirports(pagination);
-
-        CollectionModel<EntityModel<AirportResource>> airportCollectionModel = airportAssembler.toCollectionModel(
-                airports.getContent(), AirportResource::id
-        );
-
-        PagedModel<EntityModel<AirportResource>> pagedModel = airportAssembler.toPagedModel(
-                airports, airportCollectionModel
-        );
+        var airports = airportService.getAllAirports(pagination);
+        var airportCollectionModel = airportAssembler.toCollectionModel(airports.getContent(), AirportResource::id);
+        var pagedModel = airportAssembler.toPagedModel(airports, airportCollectionModel);
 
         return ResponseEntity.ok().body(pagedModel);
     }

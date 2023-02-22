@@ -3,7 +3,6 @@ package com.gfreitash.flight_booking.controllers.assemblers;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import java.util.function.ToIntFunction;
 
@@ -43,12 +42,10 @@ public class EntityModelAssembler<T, D> implements RepresentationModelAssembler<
     }
 
     public PagedModel<EntityModel<T>> toPagedModel(Page<T> page, CollectionModel<EntityModel<T>> collectionModel) {
-        PagedModel<EntityModel<T>> pagedModel = PagedModel.of(
-               collectionModel.getContent(),
-                new PagedModel.PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements())
-        );
+        var pageMetadata = new PagedModel.PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
+        PagedModel<EntityModel<T>> pagedModel = PagedModel.of(collectionModel.getContent(), pageMetadata);
 
-        WebMvcLinkBuilder link = linkTo(controllerClass);
+        var link = linkTo(controllerClass);
         pagedModel.add(link.withSelfRel());
         if (page.hasPrevious()) {
             pagedModel.add(link.withRel(IanaLinkRelations.PREVIOUS));
