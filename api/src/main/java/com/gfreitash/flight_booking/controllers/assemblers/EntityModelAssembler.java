@@ -24,6 +24,7 @@ public class EntityModelAssembler<T, D> implements RepresentationModelAssembler<
     public EntityModel<T> toModel(T entity, Link... links) {
         EntityModel<T> entityModel = EntityModel.of(entity);
         entityModel.add(links);
+        entityModel.add(linkTo(controllerClass).withRel(IanaLinkRelations.COLLECTION));
         return entityModel;
     }
 
