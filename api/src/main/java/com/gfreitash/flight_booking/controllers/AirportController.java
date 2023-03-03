@@ -1,7 +1,7 @@
 package com.gfreitash.flight_booking.controllers;
 
 import com.gfreitash.flight_booking.controllers.assemblers.EntityModelAssembler;
-import com.gfreitash.flight_booking.dto.AirportResource;
+import com.gfreitash.flight_booking.dto.output.AirportOutputDTO;
 import com.gfreitash.flight_booking.services.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class AirportController {
 
     private final AirportService airportService;
-    private final EntityModelAssembler<AirportResource, AirportController> airportAssembler;
+    private final EntityModelAssembler<AirportOutputDTO, AirportController> airportAssembler;
 
     @Autowired
     public AirportController(AirportService airportService) {
@@ -30,7 +30,7 @@ public class AirportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<AirportResource>> getOneAirport(@PathVariable String id) {
+    public ResponseEntity<EntityModel<AirportOutputDTO>> getOneAirport(@PathVariable String id) {
         var selfLink = linkTo(methodOn(AirportController.class).getOneAirport(id)).withSelfRel();
         var collectionLink = linkTo(methodOn(AirportController.class).getAllAirports(null)).withRel("collection");
 
@@ -41,9 +41,9 @@ public class AirportController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<AirportResource>>> getAllAirports(Pageable pagination) {
+    public ResponseEntity<PagedModel<EntityModel<AirportOutputDTO>>> getAllAirports(Pageable pagination) {
         var airports = airportService.getAllAirports(pagination);
-        var airportCollectionModel = airportAssembler.toCollectionModel(airports.getContent(), AirportResource::id);
+        var airportCollectionModel = airportAssembler.toCollectionModel(airports.getContent(), AirportOutputDTO::id);
         var pagedModel = airportAssembler.toPagedModel(airports, airportCollectionModel);
 
         return ResponseEntity.ok().body(pagedModel);
