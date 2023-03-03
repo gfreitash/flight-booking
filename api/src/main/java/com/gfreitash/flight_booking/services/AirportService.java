@@ -1,6 +1,6 @@
 package com.gfreitash.flight_booking.services;
 
-import com.gfreitash.flight_booking.dto.AirportResource;
+import com.gfreitash.flight_booking.dto.output.AirportOutputDTO;
 import com.gfreitash.flight_booking.repositories.AirportRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,16 +18,16 @@ public class AirportService {
         this.airportRepository = airportRepository;
     }
 
-    public Optional<AirportResource> getAirportById(String id) {
-        return airportRepository.findById(Integer.valueOf(id)).map(AirportResource::new);
+    public Optional<AirportOutputDTO> getAirportById(String id) {
+        return airportRepository.findById(Integer.valueOf(id)).map(AirportOutputDTO::new);
     }
 
-    public List<AirportResource> getAllAirports() {
-        return airportRepository.findAll().stream().map(AirportResource::new).toList();
+    public List<AirportOutputDTO> getAllAirports() {
+        return airportRepository.findAll().stream().map(AirportOutputDTO::new).toList();
     }
 
-    public Page<AirportResource> getAllAirports(Pageable pagination) {
-        return airportRepository.findAll(pagination).map(AirportResource::new);
+    public Page<AirportOutputDTO> getAllAirports(Pageable pagination) {
+        return airportRepository.findAll(pagination).map(AirportOutputDTO::new);
     }
 
 }
