@@ -20,11 +20,13 @@ import java.util.Objects;
 public class Booking {
     @EmbeddedId
     private BookingId id;
+
     @NotNull
     private Integer ticket;
 
     @NotNull
     private Integer seatRow;
+
     @NotNull
     private Integer seatColumn;
 

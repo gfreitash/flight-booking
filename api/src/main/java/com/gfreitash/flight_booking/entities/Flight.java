@@ -19,19 +19,28 @@ public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @NotNull
     @ManyToOne
+    @JoinColumn(name="origin")
     private Airport origin;
+
     @NotNull
     @ManyToOne
+    @JoinColumn(name="destination")
     private Airport destination;
+
     @NotNull
     private LocalDateTime departure;
+
     @NotNull
     private LocalDateTime estimatedArrival;
+
     private LocalDateTime actualArrival;
+
     @NotNull
     private Integer seatRows;
+
     @NotNull
     private Integer seatColumns;
 

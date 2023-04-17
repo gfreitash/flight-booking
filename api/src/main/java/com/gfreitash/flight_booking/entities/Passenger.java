@@ -22,12 +22,16 @@ public class Passenger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @NotNull
     private String name;
+
     @NotNull
     private String surname;
+
     @NotNull
     private String idNumber;
+
     @NotNull
     private LocalDate birthDate;
 

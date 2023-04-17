@@ -18,21 +18,29 @@ public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @NotNull
     private String name;
+
     @NotNull
     @Column(unique = true)
     private String iataCode;
+
     @NotNull
     private String city;
+
     @NotNull
     private String state;
+
     @NotNull
     private String stateAbbreviation;
+
     @NotNull
     private Double latitude;
+
     @NotNull
     private Double longitude;
+
     private Long yearlyPassengers;
 
     @Override
