@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+import java.util.function.Function;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -32,10 +35,9 @@ public class AirportController {
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<AirportOutputDTO>> getOneAirport(@PathVariable String id) {
         var selfLink = linkTo(methodOn(AirportController.class).getOneAirport(id)).withSelfRel();
-        var collectionLink = linkTo(methodOn(AirportController.class).getAllAirports(null)).withRel("collection");
 
         return airportService.getAirportById(id)
-                .map(airport -> airportAssembler.toModel(airport, selfLink, collectionLink))
+                .map(airport -> airportAssembler.toModel(airport, selfLink))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -43,7 +45,15 @@ public class AirportController {
     @GetMapping
     public ResponseEntity<PagedModel<EntityModel<AirportOutputDTO>>> getAllAirports(Pageable pagination) {
         var airports = airportService.getAllAirports(pagination);
-        var airportCollectionModel = airportAssembler.toCollectionModel(airports.getContent(), AirportOutputDTO::id);
+
+        Function<EntityModel<AirportOutputDTO>, Void> itemLinks = airportModel -> {
+            var airportId = String.valueOf(Objects.requireNonNull(airportModel.getContent()).id());
+
+            airportModel.add(linkTo(methodOn(AirportController.class).getOneAirport(airportId)).withSelfRel());
+            return null;
+        };
+
+        var airportCollectionModel = airportAssembler.toCollectionModel(airports.getContent(), itemLinks);
         var pagedModel = airportAssembler.toPagedModel(airports, airportCollectionModel);
 
         return ResponseEntity.ok().body(pagedModel);
