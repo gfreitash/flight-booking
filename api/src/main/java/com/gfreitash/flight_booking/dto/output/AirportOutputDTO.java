@@ -1,15 +1,16 @@
 package com.gfreitash.flight_booking.dto.output;
 import com.gfreitash.flight_booking.entities.Airport;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "airports", itemRelation = "airport")
 public record AirportOutputDTO(@NotNull Integer id,
-                               @NotNull String name,
-                               @NotNull String iataCode,
-                               @NotNull String city,
-                               @NotNull String state,
-                               @NotNull String stateAbbreviation,
+                               @NotBlank String name,
+                               @NotBlank String iataCode,
+                               @NotBlank String city,
+                               @NotBlank String state,
+                               @NotBlank String stateAbbreviation,
                                @NotNull Double latitude,
                                @NotNull Double longitude) {
 
