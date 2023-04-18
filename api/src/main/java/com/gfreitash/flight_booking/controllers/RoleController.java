@@ -87,8 +87,8 @@ public class RoleController {
         if (role.isPresent()) {
             roleService.deleteRole(role.get().id());
             return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
 }

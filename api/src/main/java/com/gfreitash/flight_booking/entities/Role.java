@@ -27,9 +27,4 @@ public class Role implements Serializable {
     @OneToOne
     @JoinColumn(name="parent_role_id")
     private Role parentRole;
-
-    public Role(String name, Role parentRole) {
-        this.name = name;
-        this.parentRole = parentRole;
-    }
 }

@@ -20,7 +20,10 @@ public class RoleService {
 
     public Role saveRole(RoleInputDTO role) {
         var parentRole = role.parentRole() != null ? roleRepository.findByName(role.parentRole()).orElse(null) : null;
-        return roleRepository.save(new Role(role.name(), parentRole));
+        return roleRepository.save(Role.builder()
+                .name(role.name())
+                .parentRole(parentRole)
+                .build());
     }
 
     public Role updateRole(String id, RoleInputDTO role) {
