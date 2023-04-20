@@ -18,20 +18,21 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
 
-    public Role saveRole(RoleInputDTO role) {
+    public RoleOutputDTO saveRole(RoleInputDTO role) {
         var parentRole = role.parentRole() != null ? roleRepository.findByName(role.parentRole()).orElse(null) : null;
-        return roleRepository.save(Role.builder()
+        var savedRole = roleRepository.save(Role.builder()
                 .name(role.name())
                 .parentRole(parentRole)
                 .build());
+        return new RoleOutputDTO(savedRole);
     }
 
-    public Role updateRole(String id, RoleInputDTO role) {
+    public RoleOutputDTO updateRole(String id, RoleInputDTO role) {
         var parentRole = role.parentRole() != null ? roleRepository.findByName(role.parentRole()).orElse(null) : null;
         var roleToUpdate = roleRepository.findById(Integer.parseInt(id)).orElseThrow();
         roleToUpdate.setName(role.name());
         roleToUpdate.setParentRole(parentRole);
-        return roleRepository.save(roleToUpdate);
+        return new RoleOutputDTO(roleRepository.save(roleToUpdate));
     }
 
     public Optional<RoleOutputDTO> getRoleById(String id) {

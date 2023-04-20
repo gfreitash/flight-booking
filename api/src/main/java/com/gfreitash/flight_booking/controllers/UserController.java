@@ -75,14 +75,14 @@ public class UserController {
     @Transactional
     public ResponseEntity<EntityModel<UserOutputDTO>> createUser(@RequestBody UserInputDTO user) {
         var newUser = userService.saveUser(user);
-        return getOneUser(String.valueOf(newUser.getId()));
+        return getOneUser(String.valueOf(newUser.id()));
     }
 
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<EntityModel<UserOutputDTO>> updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateDTO user) {
         var updatedUser = userService.updateUser(id, user);
-        return getOneUser(String.valueOf(updatedUser.getId()));
+        return getOneUser(String.valueOf(updatedUser.id()));
     }
 
     @PutMapping("/{id}/role")

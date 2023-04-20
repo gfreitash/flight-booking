@@ -44,7 +44,7 @@ public class RoleController {
     @Transactional
     public ResponseEntity<EntityModel<RoleOutputDTO>> createRole(@RequestBody @Valid RoleInputDTO role) {
         var newRole = roleService.saveRole(role);
-        return getOneRole(String.valueOf(newRole.getId()));
+        return getOneRole(String.valueOf(newRole.id()));
     }
 
     @GetMapping
@@ -77,7 +77,7 @@ public class RoleController {
     @Transactional
     public ResponseEntity<EntityModel<RoleOutputDTO>> updateRole(@PathVariable String id, @RequestBody @Valid RoleInputDTO role) {
         var updatedRole = roleService.updateRole(id, role);
-        return getOneRole(String.valueOf(updatedRole.getId()));
+        return getOneRole(String.valueOf(updatedRole.id()));
     }
 
     @DeleteMapping("/{id}")

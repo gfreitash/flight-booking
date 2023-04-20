@@ -21,24 +21,25 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    public User saveUser(UserInputDTO user) {
+    public UserOutputDTO saveUser(UserInputDTO user) {
         var role = roleRepository.findByName((user.role().name())).orElseThrow();
-        return userRepository.save(User.builder()
+        var savedRole = userRepository.save(User.builder()
                 .email(user.email())
                 .name(user.name())
                 .surname(user.surname())
                 .password(user.password())
                 .role(role)
                 .build());
+        return new UserOutputDTO(savedRole);
     }
 
-    public User updateUser(String id, UserUpdateDTO user) {
+    public UserOutputDTO updateUser(String id, UserUpdateDTO user) {
         var userToUpdate = userRepository.findById(Integer.parseInt(id)).orElseThrow();
         userToUpdate.setName(user.name());
         userToUpdate.setSurname(user.surname());
         userToUpdate.setEmail(user.email());
         userToUpdate.setPassword(user.password());
-        return userRepository.save(userToUpdate);
+        return new UserOutputDTO(userRepository.save(userToUpdate));
     }
 
     public User updateUserRole(String id, String role) {
