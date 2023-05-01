@@ -1,4 +1,4 @@
-package com.gfreitash.flight_booking.dto.update;
+package com.gfreitash.flight_booking.services.dto.update;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

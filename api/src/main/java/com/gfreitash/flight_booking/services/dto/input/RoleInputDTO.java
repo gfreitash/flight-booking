@@ -1,4 +1,4 @@
-package com.gfreitash.flight_booking.dto.input;
+package com.gfreitash.flight_booking.services.dto.input;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

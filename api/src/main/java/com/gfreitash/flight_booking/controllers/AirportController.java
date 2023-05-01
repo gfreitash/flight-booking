@@ -1,7 +1,7 @@
 package com.gfreitash.flight_booking.controllers;
 
 import com.gfreitash.flight_booking.controllers.assemblers.EntityModelAssembler;
-import com.gfreitash.flight_booking.dto.output.AirportOutputDTO;
+import com.gfreitash.flight_booking.services.dto.output.AirportOutputDTO;
 import com.gfreitash.flight_booking.services.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

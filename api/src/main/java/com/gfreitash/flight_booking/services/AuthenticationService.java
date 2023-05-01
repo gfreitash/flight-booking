@@ -1,8 +1,8 @@
 package com.gfreitash.flight_booking.services;
 
-import com.gfreitash.flight_booking.dto.input.AuthenticationRequest;
-import com.gfreitash.flight_booking.dto.input.UserInputDTO;
-import com.gfreitash.flight_booking.dto.output.AuthenticationResponse;
+import com.gfreitash.flight_booking.services.dto.input.AuthenticationRequest;
+import com.gfreitash.flight_booking.services.dto.input.UserInputDTO;
+import com.gfreitash.flight_booking.services.dto.output.AuthenticationResponse;
 import com.gfreitash.flight_booking.entities.User;
 import com.gfreitash.flight_booking.exceptions.EmailAlreadyRegisteredException;
 import com.gfreitash.flight_booking.exceptions.RoleDoesNotExistException;

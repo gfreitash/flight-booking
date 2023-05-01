@@ -1,6 +1,6 @@
 package com.gfreitash.flight_booking.services;
 
-import com.gfreitash.flight_booking.dto.output.AirportOutputDTO;
+import com.gfreitash.flight_booking.services.dto.output.AirportOutputDTO;
 import com.gfreitash.flight_booking.repositories.AirportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

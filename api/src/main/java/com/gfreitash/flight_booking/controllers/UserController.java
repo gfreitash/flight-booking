@@ -1,9 +1,9 @@
 package com.gfreitash.flight_booking.controllers;
 
 import com.gfreitash.flight_booking.controllers.assemblers.EntityModelAssembler;
-import com.gfreitash.flight_booking.dto.input.UserInputDTO;
-import com.gfreitash.flight_booking.dto.output.UserOutputDTO;
-import com.gfreitash.flight_booking.dto.update.UserUpdateDTO;
+import com.gfreitash.flight_booking.services.dto.input.UserInputDTO;
+import com.gfreitash.flight_booking.services.dto.output.UserOutputDTO;
+import com.gfreitash.flight_booking.services.dto.update.UserUpdateDTO;
 import com.gfreitash.flight_booking.services.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.gfreitash.flight_booking.dto.output;
+package com.gfreitash.flight_booking.services.dto.output;
 
 import com.gfreitash.flight_booking.entities.User;
 import jakarta.validation.Valid;

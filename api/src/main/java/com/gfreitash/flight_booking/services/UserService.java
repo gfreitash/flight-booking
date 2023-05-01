@@ -1,8 +1,8 @@
 package com.gfreitash.flight_booking.services;
 
-import com.gfreitash.flight_booking.dto.input.UserInputDTO;
-import com.gfreitash.flight_booking.dto.output.UserOutputDTO;
-import com.gfreitash.flight_booking.dto.update.UserUpdateDTO;
+import com.gfreitash.flight_booking.services.dto.input.UserInputDTO;
+import com.gfreitash.flight_booking.services.dto.output.UserOutputDTO;
+import com.gfreitash.flight_booking.services.dto.update.UserUpdateDTO;
 import com.gfreitash.flight_booking.entities.User;
 import com.gfreitash.flight_booking.repositories.RoleRepository;
 import com.gfreitash.flight_booking.repositories.UserRepository;

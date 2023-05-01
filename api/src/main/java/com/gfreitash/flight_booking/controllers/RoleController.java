@@ -1,8 +1,8 @@
 package com.gfreitash.flight_booking.controllers;
 
 import com.gfreitash.flight_booking.controllers.assemblers.EntityModelAssembler;
-import com.gfreitash.flight_booking.dto.input.RoleInputDTO;
-import com.gfreitash.flight_booking.dto.output.RoleOutputDTO;
+import com.gfreitash.flight_booking.services.dto.input.RoleInputDTO;
+import com.gfreitash.flight_booking.services.dto.output.RoleOutputDTO;
 import com.gfreitash.flight_booking.services.RoleService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

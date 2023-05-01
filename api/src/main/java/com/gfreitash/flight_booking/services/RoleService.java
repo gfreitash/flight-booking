@@ -1,7 +1,7 @@
 package com.gfreitash.flight_booking.services;
 
-import com.gfreitash.flight_booking.dto.input.RoleInputDTO;
-import com.gfreitash.flight_booking.dto.output.RoleOutputDTO;
+import com.gfreitash.flight_booking.services.dto.input.RoleInputDTO;
+import com.gfreitash.flight_booking.services.dto.output.RoleOutputDTO;
 import com.gfreitash.flight_booking.entities.Role;
 import com.gfreitash.flight_booking.repositories.RoleRepository;
 import lombok.RequiredArgsConstructor;

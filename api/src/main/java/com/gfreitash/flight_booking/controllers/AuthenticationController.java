@@ -1,8 +1,8 @@
 package com.gfreitash.flight_booking.controllers;
 
-import com.gfreitash.flight_booking.dto.input.AuthenticationRequest;
-import com.gfreitash.flight_booking.dto.input.UserInputDTO;
-import com.gfreitash.flight_booking.dto.output.AuthenticationResponse;
+import com.gfreitash.flight_booking.services.dto.input.AuthenticationRequest;
+import com.gfreitash.flight_booking.services.dto.input.UserInputDTO;
+import com.gfreitash.flight_booking.services.dto.output.AuthenticationResponse;
 import com.gfreitash.flight_booking.services.AuthenticationService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
