@@ -19,6 +19,8 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
+    public static final String MAPPERS_PACKAGE = "com.gfreitash.flight_booking.services.mappers";
+
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
