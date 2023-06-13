@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation is used to mark a validator as a validator for a specific class
- * It is a complimentary annotation of class that implements SpecificationValidator
+ * It is a complimentary annotation of a class that implements SpecificationValidator
+ * The main use of this annotation is to be able to inject a validator for a specific class
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
