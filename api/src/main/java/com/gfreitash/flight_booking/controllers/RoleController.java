@@ -23,7 +23,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class RoleController {
 
     private final RoleService roleService;
-    private final EntityModelAssembler<RoleOutputDTO, RoleController> roleAssembler;
+    private final EntityModelAssembler<RoleOutputDTO> roleAssembler;
 
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
@@ -31,10 +31,10 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<RoleOutputDTO>> getOneRole(@PathVariable String id) {
+    public ResponseEntity<EntityModel<RoleOutputDTO>> getOneRole(@PathVariable Integer id) {
         var selfLink = linkTo(methodOn(RoleController.class).getOneRole(id)).withSelfRel();
 
-        return roleService.getRoleById(id)
+        return roleService.getRoleById(String.valueOf(id))
                 .map(role -> roleAssembler.toModel(role, selfLink))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -44,7 +44,9 @@ public class RoleController {
     @Transactional
     public ResponseEntity<EntityModel<RoleOutputDTO>> createRole(@RequestBody @Valid RoleInputDTO role) {
         var newRole = roleService.saveRole(role);
-        return getOneRole(String.valueOf(newRole.id()));
+        var selfLink = linkTo(methodOn(RoleController.class).getOneRole(newRole.id())).withSelfRel();
+
+        return ResponseEntity.created(selfLink.toUri()).body(roleAssembler.toModel(newRole, selfLink));
     }
 
     @GetMapping
@@ -52,14 +54,14 @@ public class RoleController {
         var roles = roleService.getAllRoles(pagination);
 
         Function<EntityModel<RoleOutputDTO>, Void> itemLinks = roleModel -> {
-            var roleId = String.valueOf(Objects.requireNonNull(roleModel.getContent()).id());
+            var roleId = Objects.requireNonNull(roleModel.getContent()).id();
 
             roleModel.add(linkTo(methodOn(RoleController.class).getOneRole(roleId)).withSelfRel());
             roleService.getRoleByName(roleModel.getContent().parentRole())
                     .ifPresent(
                             parentRole -> roleModel.add(
                                     linkTo(methodOn(RoleController.class)
-                                            .getOneRole(String.valueOf(parentRole.id())))
+                                            .getOneRole(parentRole.id()))
                                             .withRel("parentRole")
                             )
                     );
@@ -68,7 +70,7 @@ public class RoleController {
         };
 
         var roleCollectionModel = roleAssembler.toCollectionModel(roles.getContent(),itemLinks);
-        var pagedModel = roleAssembler.toPagedModel(roles, roleCollectionModel);
+        var pagedModel = roleAssembler.toPagedModel(roles, pagination, roleCollectionModel);
 
         return ResponseEntity.ok().body(pagedModel);
     }
@@ -77,13 +79,13 @@ public class RoleController {
     @Transactional
     public ResponseEntity<EntityModel<RoleOutputDTO>> updateRole(@PathVariable String id, @RequestBody @Valid RoleInputDTO role) {
         var updatedRole = roleService.updateRole(id, role);
-        return getOneRole(String.valueOf(updatedRole.id()));
+        return getOneRole(updatedRole.id());
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<Object> deleteRole(@PathVariable String id) {
-        var role = roleService.getRoleById(id);
+    public ResponseEntity<Object> deleteRole(@PathVariable Integer id) {
+        var role = roleService.getRoleById(String.valueOf(id));
         if (role.isPresent()) {
             roleService.deleteRole(role.get().id());
             return ResponseEntity.noContent().build();

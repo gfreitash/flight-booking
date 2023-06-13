@@ -24,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class AirportController {
 
     private final AirportService airportService;
-    private final EntityModelAssembler<AirportOutputDTO, AirportController> airportAssembler;
+    private final EntityModelAssembler<AirportOutputDTO> airportAssembler;
 
     @Autowired
     public AirportController(AirportService airportService) {
@@ -54,7 +54,7 @@ public class AirportController {
         };
 
         var airportCollectionModel = airportAssembler.toCollectionModel(airports.getContent(), itemLinks);
-        var pagedModel = airportAssembler.toPagedModel(airports, airportCollectionModel);
+        var pagedModel = airportAssembler.toPagedModel(airports, pagination, airportCollectionModel);
 
         return ResponseEntity.ok().body(pagedModel);
     }
