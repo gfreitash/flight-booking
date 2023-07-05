@@ -4,6 +4,7 @@ import com.gfreitash.flight_booking.controllers.assemblers.EntityModelAssembler;
 import com.gfreitash.flight_booking.services.dto.input.RoleInputDTO;
 import com.gfreitash.flight_booking.services.dto.output.RoleOutputDTO;
 import com.gfreitash.flight_booking.services.RoleService;
+import com.gfreitash.flight_booking.services.dto.update.RoleUpdateDTO;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ public class RoleController {
     public ResponseEntity<EntityModel<RoleOutputDTO>> getOneRole(@PathVariable Integer id) {
         var selfLink = linkTo(methodOn(RoleController.class).getOneRole(id)).withSelfRel();
 
-        return roleService.getRoleById(String.valueOf(id))
+        return roleService.getRoleById(id)
                 .map(role -> roleAssembler.toModel(role, selfLink))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -77,15 +78,15 @@ public class RoleController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<EntityModel<RoleOutputDTO>> updateRole(@PathVariable String id, @RequestBody @Valid RoleInputDTO role) {
-        var updatedRole = roleService.updateRole(id, role);
+    public ResponseEntity<EntityModel<RoleOutputDTO>> updateRole(@Valid RoleUpdateDTO role) {
+        var updatedRole = roleService.updateRole(role);
         return getOneRole(updatedRole.id());
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Object> deleteRole(@PathVariable Integer id) {
-        var role = roleService.getRoleById(String.valueOf(id));
+        var role = roleService.getRoleById(id);
         if (role.isPresent()) {
             roleService.deleteRole(role.get().id());
             return ResponseEntity.noContent().build();

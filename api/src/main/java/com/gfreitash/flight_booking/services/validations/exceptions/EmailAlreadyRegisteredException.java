@@ -1,4 +1,4 @@
-package com.gfreitash.flight_booking.exceptions;
+package com.gfreitash.flight_booking.services.validations.exceptions;
 
 import lombok.experimental.StandardException;
 
