@@ -22,7 +22,7 @@ public class ValidationsConfig {
      * This method create a list of all the validators that are annotated with @Validates
      * and implements SpecificationValidator.
      */
-    public <T> List<SpecificationValidator<T>> inputSpecifications(Class<T> targetClass) {
+    public <T> List<SpecificationValidator<T>> getSpecificationValidators(Class<T> targetClass) {
         List<SpecificationValidator<T>> specificationValidators = new ArrayList<>();
         Map<String, Object> validatorBeans = applicationContext.getBeansWithAnnotation(Validates.class);
         for (Object validatorBean : validatorBeans.values()) {

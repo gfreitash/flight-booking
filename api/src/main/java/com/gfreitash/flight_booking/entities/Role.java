@@ -20,6 +20,7 @@ public class Role implements Serializable {
     private Integer id;
 
     @NotNull
+    @Column(unique = true)
     private String name;
 
     @OneToOne

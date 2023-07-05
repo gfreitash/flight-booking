@@ -1,8 +1,11 @@
 package com.gfreitash.flight_booking.services;
 
-import com.gfreitash.flight_booking.exceptions.RoleCanNotBeOwnSubRoleException;
+import com.gfreitash.flight_booking.services.dto.update.RoleUpdateDTO;
+import com.gfreitash.flight_booking.services.validations.exceptions.RoleAlreadyExistsException;
+import com.gfreitash.flight_booking.services.validations.exceptions.RoleIsOwnSubRoleException;
 import com.gfreitash.flight_booking.services.dto.input.RoleInputDTO;
-import com.gfreitash.flight_booking.exceptions.RoleDoesNotExistException;
+import com.gfreitash.flight_booking.services.validations.exceptions.RoleDoesNotExistException;
+import com.gfreitash.flight_booking.services.validations.exceptions.RoleSameAsParentRoleException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
@@ -69,7 +72,7 @@ class RoleServiceTest {
     }
 
     @Test
-    @DisplayName("saveName with blank name input should throw ConstraintViolationException")
+    @DisplayName("saveRole with blank name input should throw ConstraintViolationException")
     void saveRoleTest4() {
         var parentRoleName = "ROLE_ADMIN";
 
@@ -105,122 +108,165 @@ class RoleServiceTest {
     @Test
     @DisplayName("updateRole with valid input should return updated role")
     void updateRoleTest1() {
-        var roleId = "3";
+        var roleId = 3;
         var roleName = "TestRole";
         var parentRoleName = "ROLE_ADMIN";
 
-        var inputDTO = RoleInputDTO.builder()
+        var updateDto = RoleUpdateDTO.builder()
+                .id(roleId)
                 .name(roleName)
                 .parentRole(parentRoleName)
                 .build();
 
-        var outputDTO = roleService.updateRole(roleId, inputDTO);
+        var outputDTO = roleService.updateRole(updateDto);
 
         Assertions.assertThat(outputDTO.name()).isEqualTo(roleName);
         Assertions.assertThat(outputDTO.parentRole()).isEqualTo(parentRoleName);
-        Assertions.assertThat(outputDTO.id()).isEqualTo(Integer.parseInt(roleId));
+        Assertions.assertThat(outputDTO.id()).isEqualTo(roleId);
     }
 
     @Test
     @DisplayName("updateRole with non-null invalid parent role input should throw RoleDoesNotExistException")
     void updateRoleTest2() {
-        var roleId = "1";
+        var roleId = 1;
         var roleName = "TestRole";
         var parentRoleName = "ROLE_DOS_NOT_EXIST";
 
-        var inputDTO = RoleInputDTO.builder()
+        var updateDTO = RoleUpdateDTO.builder()
+                .id(roleId)
                 .name(roleName)
                 .parentRole(parentRoleName)
                 .build();
 
         Assertions.assertThatExceptionOfType(RoleDoesNotExistException.class)
-                .isThrownBy(() -> roleService.updateRole(roleId, inputDTO));
+                .isThrownBy(() -> roleService.updateRole(updateDTO));
     }
 
     @Test
     @DisplayName("updateRole with null parent role input should return updated role")
     void updateRoleTest3() {
-        var roleId = "1";
+        var roleId = 1;
         var roleName = "TestRole";
 
-        var inputDTO = RoleInputDTO.builder()
+        var updateDto = RoleUpdateDTO.builder()
+                .id(roleId)
                 .name(roleName)
                 .parentRole(null)
                 .build();
 
-        var outputDTO = roleService.updateRole(roleId, inputDTO);
+        var outputDTO = roleService.updateRole(updateDto);
 
         Assertions.assertThat(outputDTO.name()).isEqualTo(roleName);
         Assertions.assertThat(outputDTO.parentRole()).isNull();
-        Assertions.assertThat(outputDTO.id()).isEqualTo(Integer.parseInt(roleId));
+        Assertions.assertThat(outputDTO.id()).isEqualTo(roleId);
     }
 
     @Test
     @DisplayName("updateRole with blank name input should throw ConstraintViolationException")
     void updateRoleTest4() {
-        var roleId = "2";
+        var roleId = 2;
         var parentRoleName = "ROLE_ADMIN";
 
-        var nullNameInputDto = new RoleInputDTO(null, parentRoleName);
+        var nullNameUpdateDto = RoleUpdateDTO.builder()
+                .id(roleId)
+                .name(null)
+                .parentRole(parentRoleName)
+                .build();
 
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
-                .isThrownBy(() -> roleService.updateRole(roleId, nullNameInputDto));
+                .isThrownBy(() -> roleService.updateRole(nullNameUpdateDto));
 
-        var emptyInputNameDto = RoleInputDTO.builder()
+        var emptyNameUpdateDto = RoleUpdateDTO.builder()
+                .id(roleId)
                 .name("")
                 .parentRole(parentRoleName)
                 .build();
 
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
-                .isThrownBy(() -> roleService.updateRole(roleId, emptyInputNameDto));
+                .isThrownBy(() -> roleService.updateRole(emptyNameUpdateDto));
     }
 
     @Test
     @DisplayName("updateRole with non-existent role id should throw RoleDoesNotExistException")
     void updateRoleTest5() {
-        var roleId = "-999999";
+        var roleId = 999999;
         var roleName = "TestRole";
         var parentRoleName = "ROLE_ADMIN";
 
-        var inputDTO = RoleInputDTO.builder()
+        var roleUpdateDTO = RoleUpdateDTO.builder()
+                .id(roleId)
                 .name(roleName)
                 .parentRole(parentRoleName)
                 .build();
 
         Assertions.assertThatExceptionOfType(RoleDoesNotExistException.class)
-                .isThrownBy(() -> roleService.updateRole(roleId, inputDTO));
+                .isThrownBy(() -> roleService.updateRole(roleUpdateDTO));
     }
 
     @Test
-    @DisplayName("updateRole with parentRole same as name should throw IllegalArgumentException")
+    @DisplayName("updateRole with parentRole same as name should throw RoleSameAsParentRoleException")
     void updateRoleTest6() {
-        var roleId = "1";
+        var roleId = 1;
         var roleName = "Role_Admin";
         var otherCaseRoleName = "ROLE_ADMIN";
 
-        var inputDTO = RoleInputDTO.builder()
+        var updateDto = RoleUpdateDTO.builder()
                 .name(roleName)
                 .parentRole(otherCaseRoleName)
                 .build();
 
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> roleService.updateRole(roleId, inputDTO));
+        Assertions.assertThatExceptionOfType(RoleSameAsParentRoleException.class)
+                .isThrownBy(() -> roleService.updateRole(updateDto));
     }
 
     @Test
-    @DisplayName("updateRole with parentRole being own sub-role should throw RoleCanNotBeOwnSubRoleException")
+    @DisplayName("updateRole with parentRole being own sub-role should throw RoleIsOwnSubRoleException")
     void updateRoleTest7() {
-        var roleId = "1";
-        var roleName = "ROLE_ADMIN";
+        var roleId = 1;
+        var roleName = "ROLE_ADMIN_2";
         var parentRoleName = "ROLE_USER";
 
-        var inputDTO = RoleInputDTO.builder()
+        var updateDto = RoleUpdateDTO.builder()
+                .id(roleId)
                 .name(roleName)
                 .parentRole(parentRoleName)
                 .build();
 
-        Assertions.assertThatExceptionOfType(RoleCanNotBeOwnSubRoleException.class)
-                .isThrownBy(() -> roleService.updateRole(roleId, inputDTO));
+        Assertions.assertThatExceptionOfType(RoleIsOwnSubRoleException.class)
+                .isThrownBy(() -> roleService.updateRole(updateDto));
+    }
+
+    @Test
+    @DisplayName("updateRole with a name that already exists should throw RoleAlreadyExistsException")
+    void updateRoleTest8() {
+        var roleId = 1;
+        var roleName = "ROLE_USER";
+
+        var updateDto = RoleUpdateDTO.builder()
+                .id(roleId)
+                .name(roleName)
+                .parentRole(null)
+                .build();
+
+        Assertions.assertThatExceptionOfType(RoleAlreadyExistsException.class)
+                .isThrownBy(() -> roleService.updateRole(updateDto));
+    }
+
+    @Test
+    @DisplayName("updateRole with non-positive role id should throw ConstraintViolationException")
+    void updateRoleTest9() {
+        var roleId = 0;
+        var roleName = "TestRole";
+        var parentRoleName = "ROLE_ADMIN";
+
+        var roleUpdateDTO = RoleUpdateDTO.builder()
+                .id(roleId)
+                .name(roleName)
+                .parentRole(parentRoleName)
+                .build();
+
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> roleService.updateRole(roleUpdateDTO));
     }
 
     @Test
@@ -234,7 +280,7 @@ class RoleServiceTest {
                 .parentRole(parentRoleName)
                 .build();
         var savedRole = roleService.saveRole(inputDTO);
-        var outputDTO = roleService.getRoleById(String.valueOf(savedRole.id())).orElseThrow();
+        var outputDTO = roleService.getRoleById(savedRole.id()).orElseThrow();
 
         Assertions.assertThat(outputDTO.name()).isEqualTo(roleName);
         Assertions.assertThat(outputDTO.parentRole()).isEqualTo(parentRoleName);
@@ -243,20 +289,11 @@ class RoleServiceTest {
     @Test
     @DisplayName("getRoleById with non-existent role id should return empty optional")
     void getRoleByIdTest2() {
-        var roleId = "-999999";
+        var roleId = -999999;
 
         var outputDTO = roleService.getRoleById(roleId);
 
         Assertions.assertThat(outputDTO).isEmpty();
-    }
-
-    @Test
-    @DisplayName("getRoleById with non numerical id should throw NumberFormatException")
-    void getRoleByIdTest3() {
-        var roleId = "not a number";
-
-        Assertions.assertThatExceptionOfType(NumberFormatException.class)
-                .isThrownBy(() -> roleService.getRoleById(roleId));
     }
 
     @Test
@@ -307,7 +344,7 @@ class RoleServiceTest {
     @Test
     @DisplayName("deleteRole with valid input should then not be able to find deleted role")
     void deleteRoleTest1() {
-        var roleId = "1";
+        var roleId = 1;
 
         roleService.deleteRole(1);
 

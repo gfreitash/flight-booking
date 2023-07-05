@@ -6,9 +6,9 @@ import com.gfreitash.flight_booking.services.validations.FieldsConstraintsAreVal
 import jakarta.validation.Validator;
 
 @Validates(RoleInputDTO.class)
-public class ValidateRoleInputDtoConstraintsAreValid extends FieldsConstraintsAreValid<RoleInputDTO> {
+public class InputValidateRoleInputDtoConstraintsAreValid extends FieldsConstraintsAreValid<RoleInputDTO> {
 
-    public ValidateRoleInputDtoConstraintsAreValid(Validator validator) {
+    public InputValidateRoleInputDtoConstraintsAreValid(Validator validator) {
         super(validator);
     }
 }
